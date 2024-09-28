@@ -66,7 +66,7 @@ except ImportError:
     HAS_INFLUXDB = False
 
 # HTTP API header used to check the InfluxDB version
-influxDBVersionHeader = "X-Influxdb-Version"
+influxDBVersionHeader = "X-Influxdb-Version"  # pylint: disable=invalid-name
 
 log = logging.getLogger(__name__)
 
@@ -78,7 +78,7 @@ def __virtual__():
     if not HAS_INFLUXDB:
         return (
             False,
-            "Could not import influxdb returner; " "influxdb python client is not installed.",
+            "Could not import influxdb returner; influxdb python client is not installed.",
         )
     return __virtualname__
 
@@ -111,7 +111,7 @@ def _get_version(host, port, user, password):
             version = result.headers[influxDBVersionHeader]
     except Exception as ex:  # pylint: disable=broad-except
         log.critical(
-            "Failed to query InfluxDB version from HTTP API within InfluxDB " "returner: %s",
+            "Failed to query InfluxDB version from HTTP API within InfluxDB returner: %s",
             ex,
         )
     return version
@@ -175,7 +175,7 @@ def returner(ret):
         log.critical("Failed to store return with InfluxDB returner: %s", ex)
 
 
-def save_load(jid, load, minions=None):
+def save_load(jid, load, minions=None):  # pylint: disable=unused-argument
     """
     Save the load to the specified jid
     """

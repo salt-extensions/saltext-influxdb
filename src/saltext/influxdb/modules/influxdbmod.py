@@ -56,7 +56,7 @@ def __virtual__():
         return __virtualname__
     return (
         False,
-        "The influxdb execution module could not be loaded:" "influxdb library not available.",
+        "The influxdb execution module could not be loaded: influxdb library not available.",
     )
 
 
@@ -523,6 +523,12 @@ def grant_privilege(database, privilege, username, **client_args):
 
     username
         Name of the user to grant the privilege to.
+
+    CLI Example:
+
+    .. code-block:: bash
+
+        salt '*' influxdb.grant_privilege db read user
     """
     client = _client(**client_args)
     client.grant_privilege(privilege, database, username)
@@ -542,6 +548,12 @@ def revoke_privilege(database, privilege, username, **client_args):
 
     username
         Name of the user to grant the privilege to.
+
+    CLI Example:
+
+    .. code-block:: bash
+
+        salt '*' influxdb.revoke_privilege db read user
     """
     client = _client(**client_args)
     client.revoke_privilege(privilege, database, username)
@@ -679,9 +691,9 @@ def _pull_query_results(resultset):
     for _header, _values in resultset.items():
         _header, _group_tags = _header
         if _group_tags:
-            _results[_header][salt.utils.json.dumps(_group_tags)] = [_value for _value in _values]
+            _results[_header][salt.utils.json.dumps(_group_tags)] = list(_values)
         else:
-            _results[_header] = [_value for _value in _values]
+            _results[_header] = list(_values)
     return dict(sorted(_results.items()))
 
 
@@ -694,6 +706,12 @@ def query(database, query, **client_args):
 
     query
         InfluxQL query string.
+
+    CLI Example:
+
+    .. code-block:: bash
+
+        salt '*' influxdb.query mydb 'SELECT * FROM "foobar"'
     """
     client = _client(**client_args)
     _result = client.query(query, database=database)

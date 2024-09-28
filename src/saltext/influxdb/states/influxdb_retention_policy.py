@@ -40,6 +40,8 @@ def convert_duration(duration):
     elif duration.endswith("w"):
         weeks = duration.split("w")
         hours = int(weeks[0]) * 24 * 7
+    else:
+        raise ValueError(f"Invalid duration: {duration}")
 
     duration_string = str(hours) + "h0m0s"
     return duration_string

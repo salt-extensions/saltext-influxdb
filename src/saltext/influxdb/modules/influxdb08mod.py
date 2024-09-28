@@ -609,11 +609,13 @@ def query(
     return client.query(query, time_precision=time_precision, chunked=chunked)
 
 
-def login_test(name, password, database=None, host=None, port=None):
+def login_test(
+    name, password, database=None, host=None, port=None
+):  # pylint: disable=unused-argument
     """
     Checks if a credential pair can log in at all.
 
-    If a database is specified: it will check for database user existence.
+    [If a database is specified: it will check for database user existence.]
     If a database is not specified: it will check for cluster admin existence.
 
     name
@@ -623,7 +625,7 @@ def login_test(name, password, database=None, host=None, port=None):
         The password of the user
 
     database
-        The database to try to log in to
+        [The database to try to log in to] Not respected.
 
     host
         The host to connect to

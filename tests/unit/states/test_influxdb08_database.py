@@ -7,7 +7,7 @@ from unittest.mock import patch
 
 import pytest
 
-import saltext.influxdb.states.influxdb08_database as influxdb08_database
+from saltext.influxdb.states import influxdb08_database
 
 
 @pytest.fixture
