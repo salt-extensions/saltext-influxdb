@@ -9,6 +9,7 @@ Salt Extension for interacting with InfluxDB
   :hidden:
 
   topics/installation
+  topics/configuration
 
 .. toctree::
   :maxdepth: 2

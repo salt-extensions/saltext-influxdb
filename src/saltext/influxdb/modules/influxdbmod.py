@@ -1,30 +1,18 @@
 """
-InfluxDB - A distributed time series database
+Interface with InfluxDB 0.9-1.x
 
-Module to provide InfluxDB compatibility to Salt (compatible with InfluxDB
-version 0.9+)
+.. important::
+    You can optionally specify default connection parameters via the general :ref:`influxdb setup <influxdb-setup>`.
 
-:depends:    - influxdb Python module (>= 3.0.0)
+Most functions in this module allow you to override or provide some or all
+of these settings via keyword arguments:
 
-:configuration: This module accepts connection configuration details either as
-    parameters or as configuration settings in /etc/salt/minion on the relevant
-    minions::
+.. code-block:: bash
 
-        influxdb.host: 'localhost'
-        influxdb.port: 8086
-        influxdb.user: 'root'
-        influxdb.password: 'root'
+    salt '*' influxdb.foo_function influxdb_user='influxadmin' influxdb_password='s3cr1t'
 
-    This data can also be passed into pillar. Options passed into opts will
-    overwrite options passed into pillar.
-
-    Most functions in this module allow you to override or provide some or all
-    of these settings via keyword arguments::
-
-        salt '*' influxdb.foo_function influxdb_user='influxadmin' influxdb_password='s3cr1t'
-
-    would override ``user`` and ``password`` while still using the defaults for
-    ``host`` and ``port``.
+This overrides ``user`` and ``password`` while still using the defaults for
+``host`` and ``port``.
 """
 
 import collections
@@ -44,14 +32,10 @@ except ImportError:
 
 log = logging.getLogger(__name__)
 
-# name used to refer to this module in __salt__
 __virtualname__ = "influxdb"
 
 
 def __virtual__():
-    """
-    Only load if influxdb lib is present
-    """
     if HAS_INFLUXDB:
         return __virtualname__
     return (

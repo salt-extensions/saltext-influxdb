@@ -1,15 +1,12 @@
 """
-Management of InfluxDB users
-============================
+Manage InfluxDB 0.9-1.x users statefully.
 
-(compatible with InfluxDB version 0.9+)
+.. important::
+    You can optionally specify default connection parameters via the general :ref:`influxdb setup <influxdb-setup>`.
 """
 
 
 def __virtual__():
-    """
-    Only load if the influxdb module is available
-    """
     if "influxdb.db_exists" in __salt__:
         return "influxdb_user"
     return (False, "influxdb module could not be loaded")

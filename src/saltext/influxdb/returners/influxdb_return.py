@@ -1,48 +1,25 @@
 """
-Return data to an influxdb server.
+Return data to an InfluxDB <v2 server.
 
-.. versionadded:: 2015.8.0
+.. important::
+    Using this returner requires :ref:`minion configuration <influxdb-returner-setup>`.
 
-To enable this returner the minion will need the python client for influxdb
-installed and the following values configured in the minion or master
-config, these are the defaults:
+Usage
+-----
 
-.. code-block:: yaml
-
-    influxdb.db: 'salt'
-    influxdb.user: 'salt'
-    influxdb.password: 'salt'
-    influxdb.host: 'localhost'
-    influxdb.port: 8086
-
-
-Alternative configuration values can be used by prefacing the configuration.
-Any values not found in the alternative configuration will be pulled from
-the default location:
-
-.. code-block:: yaml
-
-    alternative.influxdb.db: 'salt'
-    alternative.influxdb.user: 'salt'
-    alternative.influxdb.password: 'salt'
-    alternative.influxdb.host: 'localhost'
-    alternative.influxdb.port: 6379
-
-To use the influxdb returner, append '--return influxdb' to the salt command.
+To use the influxdb returner, append '--return influxdb' to the Salt command.
 
 .. code-block:: bash
 
     salt '*' test.ping --return influxdb
 
-To use the alternative configuration, append '--return_config alternative' to the salt command.
+To use the alternative configuration, append '--return_config alternative' to the Salt command.
 
 .. code-block:: bash
 
     salt '*' test.ping --return influxdb --return_config alternative
 
-To override individual configuration items, append --return_kwargs '{"key:": "value"}' to the salt command.
-
-.. versionadded:: 2016.3.0
+To override individual configuration items, append --return_kwargs '{"key:": "value"}' to the Salt command.
 
 .. code-block:: bash
 
@@ -70,7 +47,6 @@ influxDBVersionHeader = "X-Influxdb-Version"  # pylint: disable=invalid-name
 
 log = logging.getLogger(__name__)
 
-# Define the module's virtual name
 __virtualname__ = "influxdb"
 
 

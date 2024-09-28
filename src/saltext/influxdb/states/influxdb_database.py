@@ -1,15 +1,12 @@
 """
-Management of Influxdb databases
-================================
+Manage InfluxDB 0.9-1.x databases statefully.
 
-(compatible with InfluxDB version 0.9+)
+.. important::
+    You can optionally specify default connection parameters via the general :ref:`influxdb setup <influxdb-setup>`.
 """
 
 
 def __virtual__():
-    """
-    Only load if the influxdb module is available
-    """
     if "influxdb.db_exists" in __salt__:
         return "influxdb_database"
     return (False, "influxdb module could not be loaded")

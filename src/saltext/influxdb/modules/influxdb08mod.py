@@ -1,24 +1,8 @@
 """
-InfluxDB - A distributed time series database
+Interface with InfluxDB 0.5-0.8
 
-Module to provide InfluxDB compatibility to Salt (compatible with InfluxDB
-version 0.5-0.8)
-
-.. versionadded:: 2014.7.0
-
-:depends:    - influxdb Python module (>= 1.0.0)
-
-:configuration: This module accepts connection configuration details either as
-    parameters or as configuration settings in /etc/salt/minion on the relevant
-    minions::
-
-        influxdb08.host: 'localhost'
-        influxdb08.port: 8086
-        influxdb08.user: 'root'
-        influxdb08.password: 'root'
-
-    This data can also be passed into pillar. Options passed into opts will
-    overwrite options passed into pillar.
+.. important::
+    You can optionally specify default connection parameters via the general :ref:`influxdb08 setup <influxdb08-setup>`.
 """
 
 import logging
@@ -34,14 +18,10 @@ except ImportError:
 log = logging.getLogger(__name__)
 
 
-# Define the module's virtual name
 __virtualname__ = "influxdb08"
 
 
 def __virtual__():
-    """
-    Only load if influxdb lib is present
-    """
     if HAS_INFLUXDB_08:
         return __virtualname__
     return (

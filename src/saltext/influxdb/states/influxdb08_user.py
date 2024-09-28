@@ -1,18 +1,12 @@
 """
-Management of InfluxDB 0.8 users
-================================
+Manage InfluxDB 0.5-0.8 users statefully.
 
-(compatible with InfluxDB version 0.5-0.8)
-
-.. versionadded:: 2014.7.0
-
+.. important::
+    You can optionally specify default connection parameters via the general :ref:`influxdb08 setup <influxdb08-setup>`.
 """
 
 
 def __virtual__():
-    """
-    Only load if the influxdb08 module is available
-    """
     if "influxdb08.db_exists" in __salt__:
         return "influxdb08_user"
     return (False, "influxdb08 module could not be loaded")

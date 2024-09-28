@@ -1,18 +1,12 @@
 """
-Management of Influxdb 0.8 databases
-====================================
+Manage InfluxDB 0.5-0.8 databases statefully.
 
-(compatible with InfluxDB version 0.5-0.8)
-
-.. versionadded:: 2014.7.0
-
+.. important::
+    You can optionally specify default connection parameters via the general :ref:`influxdb08 setup <influxdb08-setup>`.
 """
 
 
 def __virtual__():
-    """
-    Only load if the influxdb08 module is available
-    """
     if "influxdb08.db_exists" in __salt__:
         return "influxdb08_database"
     return (False, "influxdb08 module could not be loaded")
