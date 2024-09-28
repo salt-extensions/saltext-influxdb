@@ -56,8 +56,7 @@ def __virtual__():
         return __virtualname__
     return (
         False,
-        "The influxdb execution module could not be loaded:"
-        "influxdb library not available.",
+        "The influxdb execution module could not be loaded:" "influxdb library not available.",
     )
 
 
@@ -215,9 +214,7 @@ def user_info(name, **client_args):
 
         salt '*' influxdb.user_info <name>
     """
-    matching_users = (
-        user for user in list_users(**client_args) if user.get("user") == name
-    )
+    matching_users = (user for user in list_users(**client_args) if user.get("user") == name)
 
     try:
         return next(matching_users)
@@ -364,9 +361,7 @@ def get_retention_policy(database, name, **client_args):
 
     try:
         return next(
-            p
-            for p in client.get_list_retention_policies(database)
-            if p.get("name") == name
+            p for p in client.get_list_retention_policies(database) if p.get("name") == name
         )
     except StopIteration:
         return {}
@@ -417,9 +412,7 @@ def drop_retention_policy(database, name, **client_args):
     return True
 
 
-def create_retention_policy(
-    database, name, duration, replication, default=False, **client_args
-):
+def create_retention_policy(database, name, duration, replication, default=False, **client_args):
     """
     Create a retention policy.
 
@@ -458,9 +451,7 @@ def create_retention_policy(
     return True
 
 
-def alter_retention_policy(
-    database, name, duration, replication, default=False, **client_args
-):
+def alter_retention_policy(database, name, duration, replication, default=False, **client_args):
     """
     Modify an existing retention policy.
 
@@ -688,9 +679,7 @@ def _pull_query_results(resultset):
     for _header, _values in resultset.items():
         _header, _group_tags = _header
         if _group_tags:
-            _results[_header][salt.utils.json.dumps(_group_tags)] = [
-                _value for _value in _values
-            ]
+            _results[_header][salt.utils.json.dumps(_group_tags)] = [_value for _value in _values]
         else:
             _results[_header] = [_value for _value in _values]
     return dict(sorted(_results.items()))
@@ -710,9 +699,5 @@ def query(database, query, **client_args):
     _result = client.query(query, database=database)
 
     if isinstance(_result, Sequence):
-        return [
-            _pull_query_results(_query_result)
-            for _query_result in _result
-            if _query_result
-        ]
+        return [_pull_query_results(_query_result) for _query_result in _result if _query_result]
     return [_pull_query_results(_result) if _result else {}]

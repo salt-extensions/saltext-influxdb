@@ -63,9 +63,7 @@ def absent(name, **client_args):
     if __salt__["influxdb.db_exists"](name, **client_args):
         if __opts__["test"]:
             ret["result"] = None
-            ret["comment"] = "Database {} is present and needs to be removed".format(
-                name
-            )
+            ret["comment"] = f"Database {name} is present and needs to be removed"
             return ret
         if __salt__["influxdb.drop_db"](name, **client_args):
             ret["comment"] = f"Database {name} has been removed"

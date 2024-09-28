@@ -2,10 +2,12 @@
     :codeauthor: Jayesh Kariya <jayeshk@saltstack.com>
 """
 
+from unittest.mock import MagicMock
+from unittest.mock import patch
+
 import pytest
 
-import salt.states.influxdb08_user as influxdb08_user
-from tests.support.mock import MagicMock, patch
+import saltext.influxdb.states.influxdb08_user as influxdb08_user
 
 
 @pytest.fixture
@@ -44,9 +46,7 @@ def test_present():
 
         with patch.dict(influxdb08_user.__opts__, {"test": False}):
             comt = f"User {name} has been created"
-            ret.update(
-                {"comment": comt, "result": True, "changes": {"salt": "Present"}}
-            )
+            ret.update({"comment": comt, "result": True, "changes": {"salt": "Present"}})
             assert influxdb08_user.present(name, passwd) == ret
 
             comt = f"Failed to create user {name}"

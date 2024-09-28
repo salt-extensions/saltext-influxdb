@@ -53,7 +53,6 @@ To override individual configuration items, append --return_kwargs '{"key:": "va
 import logging
 
 import requests
-
 import salt.returners
 import salt.utils.jid
 from salt.utils.decorators import memoize
@@ -79,8 +78,7 @@ def __virtual__():
     if not HAS_INFLUXDB:
         return (
             False,
-            "Could not import influxdb returner; "
-            "influxdb python client is not installed.",
+            "Could not import influxdb returner; " "influxdb python client is not installed.",
         )
     return __virtualname__
 
@@ -108,15 +106,12 @@ def _get_version(host, port, user, password):
     version = None
     # check the InfluxDB version via the HTTP API
     try:
-        result = requests.get(
-            f"http://{host}:{port}/ping", auth=(user, password), timeout=120
-        )
+        result = requests.get(f"http://{host}:{port}/ping", auth=(user, password), timeout=120)
         if influxDBVersionHeader in result.headers:
             version = result.headers[influxDBVersionHeader]
     except Exception as ex:  # pylint: disable=broad-except
         log.critical(
-            "Failed to query InfluxDB version from HTTP API within InfluxDB "
-            "returner: %s",
+            "Failed to query InfluxDB version from HTTP API within InfluxDB " "returner: %s",
             ex,
         )
     return version
@@ -161,9 +156,7 @@ def returner(ret):
             {
                 "name": "returns",
                 "columns": ["fun", "id", "jid", "return", "full_ret"],
-                "points": [
-                    [ret["fun"], ret["id"], ret["jid"], json_return, json_full_ret]
-                ],
+                "points": [[ret["fun"], ret["id"], ret["jid"], json_return, json_full_ret]],
             }
         ]
     # create InfluxDB 0.9+ version request
@@ -291,9 +284,7 @@ def get_jids():
     ret = {}
     if data:
         for _, jid, load in data[0]["points"]:
-            ret[jid] = salt.utils.jid.format_jid_instance(
-                jid, salt.utils.json.loads(load)
-            )
+            ret[jid] = salt.utils.jid.format_jid_instance(jid, salt.utils.json.loads(load))
     return ret
 
 

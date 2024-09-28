@@ -1,8 +1,10 @@
+from unittest.mock import create_autospec
+from unittest.mock import patch
+
 import pytest
 
-import salt.modules.influxdbmod as influx_mod
-import salt.states.influxdb_continuous_query as influx
-from tests.support.mock import create_autospec, patch
+import saltext.influxdb.modules.influxdbmod as influx_mod
+import saltext.influxdb.states.influxdb_continuous_query as influx
 
 
 @pytest.fixture
@@ -43,7 +45,7 @@ def test_when_present_is_called_it_should_pass_client_args_to_create_module(
             query="fnord",
             resample_time="whatever",
             coverage_period="fnord",
-            **expected_kwargs
+            **expected_kwargs,
         )
 
     actual_kwargs = influx_module.create_continuous_query.mock_calls[0].kwargs

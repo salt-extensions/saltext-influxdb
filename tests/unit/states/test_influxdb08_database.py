@@ -2,10 +2,12 @@
     :codeauthor: Jayesh Kariya <jayeshk@saltstack.com>
 """
 
+from unittest.mock import MagicMock
+from unittest.mock import patch
+
 import pytest
 
-import salt.states.influxdb08_database as influxdb08_database
-from tests.support.mock import MagicMock, patch
+import saltext.influxdb.states.influxdb08_database as influxdb08_database
 
 
 @pytest.fixture
@@ -34,9 +36,7 @@ def test_present():
 
         with patch.dict(influxdb08_database.__opts__, {"test": False}):
             comt = f"Database {name} has been created"
-            ret.update(
-                {"comment": comt, "result": True, "changes": {"salt": "Present"}}
-            )
+            ret.update({"comment": comt, "result": True, "changes": {"salt": "Present"}})
             assert influxdb08_database.present(name) == ret
 
             comt = f"Failed to create database {name}"

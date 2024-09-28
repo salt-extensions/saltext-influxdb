@@ -65,9 +65,7 @@ def present(name, passwd, admin=False, grants=None, **client_args):
             ret["result"] = None
             return ret
         else:
-            if not __salt__["influxdb.create_user"](
-                name, passwd, admin=admin, **client_args
-            ):
+            if not __salt__["influxdb.create_user"](name, passwd, admin=admin, **client_args):
                 ret["comment"] = f"Failed to create user {name}"
                 ret["result"] = False
                 return ret
@@ -81,13 +79,8 @@ def present(name, passwd, admin=False, grants=None, **client_args):
                 else:
                     __salt__["influxdb.revoke_admin_privileges"](name, **client_args)
 
-                if (
-                    admin
-                    != __salt__["influxdb.user_info"](name, **client_args)["admin"]
-                ):
-                    ret["comment"] = "Failed to set admin privilege to user {}".format(
-                        name
-                    )
+                if admin != __salt__["influxdb.user_info"](name, **client_args)["admin"]:
+                    ret["comment"] = f"Failed to set admin privilege to user {name}"
                     ret["result"] = False
                     return ret
             ret["changes"]["Admin privileges"] = admin
@@ -98,18 +91,12 @@ def present(name, passwd, admin=False, grants=None, **client_args):
             privilege = privilege.lower()
             if privilege != db_privileges.get(database, privilege):
                 if not __opts__["test"]:
-                    __salt__["influxdb.revoke_privilege"](
-                        database, "all", name, **client_args
-                    )
+                    __salt__["influxdb.revoke_privilege"](database, "all", name, **client_args)
                 del db_privileges[database]
             if database not in db_privileges:
-                ret["changes"][
-                    f"Grant on database {database} to user {name}"
-                ] = privilege
+                ret["changes"][f"Grant on database {database} to user {name}"] = privilege
                 if not __opts__["test"]:
-                    __salt__["influxdb.grant_privilege"](
-                        database, privilege, name, **client_args
-                    )
+                    __salt__["influxdb.grant_privilege"](database, privilege, name, **client_args)
 
     if ret["changes"]:
         if create:
@@ -118,9 +105,7 @@ def present(name, passwd, admin=False, grants=None, **client_args):
         else:
             if __opts__["test"]:
                 ret["result"] = None
-                ret["comment"] = (
-                    f"User {name} will be updated with the following changes:"
-                )
+                ret["comment"] = f"User {name} will be updated with the following changes:"
                 for k, v in ret["changes"].items():
                     ret["comment"] += f"\n{k} => {v}"
                 ret["changes"] = {}

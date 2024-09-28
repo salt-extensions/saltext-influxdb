@@ -44,9 +44,7 @@ def present(name, user=None, password=None, host=None, port=None):
     if not __salt__["influxdb08.db_exists"](name, user, password, host, port):
         if __opts__["test"]:
             ret["result"] = None
-            ret["comment"] = "Database {} is absent and needs to be created".format(
-                name
-            )
+            ret["comment"] = f"Database {name} is absent and needs to be created"
             return ret
         if __salt__["influxdb08.db_create"](name, user, password, host, port):
             ret["comment"] = f"Database {name} has been created"
@@ -88,9 +86,7 @@ def absent(name, user=None, password=None, host=None, port=None):
     if __salt__["influxdb08.db_exists"](name, user, password, host, port):
         if __opts__["test"]:
             ret["result"] = None
-            ret["comment"] = "Database {} is present and needs to be removed".format(
-                name
-            )
+            ret["comment"] = f"Database {name} is present and needs to be removed"
             return ret
         if __salt__["influxdb08.db_remove"](name, user, password, host, port):
             ret["comment"] = f"Database {name} has been removed"

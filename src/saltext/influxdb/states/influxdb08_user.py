@@ -18,9 +18,7 @@ def __virtual__():
     return (False, "influxdb08 module could not be loaded")
 
 
-def present(
-    name, passwd, database=None, user=None, password=None, host=None, port=None
-):
+def present(name, passwd, database=None, user=None, password=None, host=None, port=None):
     """
     Ensure that the cluster admin or database user is present.
 
@@ -49,27 +47,19 @@ def present(
     ret = {"name": name, "changes": {}, "result": True, "comment": ""}
 
     # check if db does not exist
-    if database and not __salt__["influxdb08.db_exists"](
-        database, user, password, host, port
-    ):
+    if database and not __salt__["influxdb08.db_exists"](database, user, password, host, port):
         ret["result"] = False
         ret["comment"] = f"Database {database} does not exist"
         return ret
 
     # check if user exists
-    if not __salt__["influxdb08.user_exists"](
-        name, database, user, password, host, port
-    ):
+    if not __salt__["influxdb08.user_exists"](name, database, user, password, host, port):
         if __opts__["test"]:
             ret["result"] = None
-            ret["comment"] = "User {} is not present and needs to be created".format(
-                name
-            )
+            ret["comment"] = f"User {name} is not present and needs to be created"
             return ret
         # The user is not present, make it!
-        if __salt__["influxdb08.user_create"](
-            name, passwd, database, user, password, host, port
-        ):
+        if __salt__["influxdb08.user_create"](name, passwd, database, user, password, host, port):
             ret["comment"] = f"User {name} has been created"
             ret["changes"][name] = "Present"
             return ret
@@ -114,9 +104,7 @@ def absent(name, database=None, user=None, password=None, host=None, port=None):
             ret["result"] = None
             ret["comment"] = f"User {name} is present and needs to be removed"
             return ret
-        if __salt__["influxdb08.user_remove"](
-            name, database, user, password, host, port
-        ):
+        if __salt__["influxdb08.user_remove"](name, database, user, password, host, port):
             ret["comment"] = f"User {name} has been removed"
             ret["changes"][name] = "Absent"
             return ret

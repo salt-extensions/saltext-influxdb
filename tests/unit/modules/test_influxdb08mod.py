@@ -2,8 +2,10 @@
     :codeauthor: Rupesh Tare <rupesht@saltstack.com>
 """
 
-import salt.modules.influxdb08mod as influx08
-from tests.support.mock import MagicMock, patch
+from unittest.mock import MagicMock
+from unittest.mock import patch
+
+import saltext.influxdb.modules.influxdb08mod as influx08
 from tests.support.unit import TestCase
 
 DB_LIST = ["A", "B", "C"]
@@ -56,11 +58,9 @@ class InfluxTestCase(TestCase):
         """
         mock_inf_db_client = MagicMock(return_value=MockInfluxDBClient())
         with patch.object(influx08, "_client", mock_inf_db_client):
-            self.assertEqual(
-                influx08.db_list(
-                    user="root", password="root", host="localhost", port=8086
-                ),
-                DB_LIST,
+            assert (
+                influx08.db_list(user="root", password="root", host="localhost", port=8086)
+                == DB_LIST
             )
 
     def test_db_exists(self):
@@ -68,16 +68,12 @@ class InfluxTestCase(TestCase):
         Tests for checks if a database exists in InfluxDB
         """
         with patch.object(influx08, "db_list", side_effect=[[{"name": "A"}], None]):
-            self.assertTrue(
-                influx08.db_exists(
-                    name="A", user="root", password="root", host="localhost", port=8000
-                )
+            assert influx08.db_exists(
+                name="A", user="root", password="root", host="localhost", port=8000
             )
 
-            self.assertFalse(
-                influx08.db_exists(
-                    name="A", user="root", password="root", host="localhost", port=8000
-                )
+            assert not influx08.db_exists(
+                name="A", user="root", password="root", host="localhost", port=8000
             )
 
     def test_db_create(self):
@@ -85,22 +81,18 @@ class InfluxTestCase(TestCase):
         Test to create a database
         """
         with patch.object(influx08, "db_exists", side_effect=[True, False]):
-            self.assertFalse(
-                influx08.db_create(
-                    name="A", user="root", password="root", host="localhost", port=8000
-                )
+            assert not influx08.db_create(
+                name="A", user="root", password="root", host="localhost", port=8000
             )
 
             mock_inf_db_client = MagicMock(return_value=MockInfluxDBClient())
             with patch.object(influx08, "_client", mock_inf_db_client):
-                self.assertTrue(
-                    influx08.db_create(
-                        name="A",
-                        user="root",
-                        password="root",
-                        host="localhost",
-                        port=8000,
-                    )
+                assert influx08.db_create(
+                    name="A",
+                    user="root",
+                    password="root",
+                    host="localhost",
+                    port=8000,
                 )
 
     def test_db_remove(self):
@@ -108,22 +100,18 @@ class InfluxTestCase(TestCase):
         Test to remove a database
         """
         with patch.object(influx08, "db_exists", side_effect=[False, True]):
-            self.assertFalse(
-                influx08.db_remove(
-                    name="A", user="root", password="root", host="localhost", port=8000
-                )
+            assert not influx08.db_remove(
+                name="A", user="root", password="root", host="localhost", port=8000
             )
 
             mock_inf_db_client = MagicMock(return_value=MockInfluxDBClient())
             with patch.object(influx08, "_client", mock_inf_db_client):
-                self.assertTrue(
-                    influx08.db_remove(
-                        name="A",
-                        user="root",
-                        password="root",
-                        host="localhost",
-                        port=8000,
-                    )
+                assert influx08.db_remove(
+                    name="A",
+                    user="root",
+                    password="root",
+                    host="localhost",
+                    port=8000,
                 )
 
     def test_user_list(self):
@@ -132,22 +120,20 @@ class InfluxTestCase(TestCase):
         """
         mock_inf_db_client = MagicMock(return_value=MockInfluxDBClient())
         with patch.object(influx08, "_client", mock_inf_db_client):
-            self.assertListEqual(
+            assert (
                 influx08.user_list(
                     database="A",
                     user="root",
                     password="root",
                     host="localhost",
                     port=8086,
-                ),
-                USER_LIST,
+                )
+                == USER_LIST
             )
 
-            self.assertListEqual(
-                influx08.user_list(
-                    user="root", password="root", host="localhost", port=8086
-                ),
-                USER_LIST,
+            assert (
+                influx08.user_list(user="root", password="root", host="localhost", port=8086)
+                == USER_LIST
             )
 
     def test_user_exists(self):
@@ -155,16 +141,12 @@ class InfluxTestCase(TestCase):
         Test to checks if a cluster admin or database user exists.
         """
         with patch.object(influx08, "user_list", side_effect=[[{"name": "A"}], None]):
-            self.assertTrue(
-                influx08.user_exists(
-                    name="A", user="root", password="root", host="localhost", port=8000
-                )
+            assert influx08.user_exists(
+                name="A", user="root", password="root", host="localhost", port=8000
             )
 
-            self.assertFalse(
-                influx08.user_exists(
-                    name="A", user="root", password="root", host="localhost", port=8000
-                )
+            assert not influx08.user_exists(
+                name="A", user="root", password="root", host="localhost", port=8000
             )
 
     def test_user_chpass(self):
@@ -172,8 +154,29 @@ class InfluxTestCase(TestCase):
         Tests to change password for a cluster admin or a database user.
         """
         with patch.object(influx08, "user_exists", return_value=False):
-            self.assertFalse(
-                influx08.user_chpass(
+            assert not influx08.user_chpass(
+                name="A",
+                passwd="*",
+                user="root",
+                password="root",
+                host="localhost",
+                port=8000,
+            )
+
+            assert not influx08.user_chpass(
+                name="A",
+                passwd="*",
+                database="test",
+                user="root",
+                password="root",
+                host="localhost",
+                port=8000,
+            )
+
+        mock_inf_db_client = MagicMock(return_value=MockInfluxDBClient())
+        with patch.object(influx08, "_client", mock_inf_db_client):
+            with patch.object(influx08, "user_exists", return_value=True):
+                assert influx08.user_chpass(
                     name="A",
                     passwd="*",
                     user="root",
@@ -181,10 +184,8 @@ class InfluxTestCase(TestCase):
                     host="localhost",
                     port=8000,
                 )
-            )
 
-            self.assertFalse(
-                influx08.user_chpass(
+                assert influx08.user_chpass(
                     name="A",
                     passwd="*",
                     database="test",
@@ -192,33 +193,6 @@ class InfluxTestCase(TestCase):
                     password="root",
                     host="localhost",
                     port=8000,
-                )
-            )
-
-        mock_inf_db_client = MagicMock(return_value=MockInfluxDBClient())
-        with patch.object(influx08, "_client", mock_inf_db_client):
-            with patch.object(influx08, "user_exists", return_value=True):
-                self.assertTrue(
-                    influx08.user_chpass(
-                        name="A",
-                        passwd="*",
-                        user="root",
-                        password="root",
-                        host="localhost",
-                        port=8000,
-                    )
-                )
-
-                self.assertTrue(
-                    influx08.user_chpass(
-                        name="A",
-                        passwd="*",
-                        database="test",
-                        user="root",
-                        password="root",
-                        host="localhost",
-                        port=8000,
-                    )
                 )
 
     def test_user_remove(self):
@@ -226,45 +200,37 @@ class InfluxTestCase(TestCase):
         Tests to remove a cluster admin or a database user.
         """
         with patch.object(influx08, "user_exists", return_value=False):
-            self.assertFalse(
-                influx08.user_remove(
-                    name="A", user="root", password="root", host="localhost", port=8000
-                )
+            assert not influx08.user_remove(
+                name="A", user="root", password="root", host="localhost", port=8000
             )
 
-            self.assertFalse(
-                influx08.user_remove(
+            assert not influx08.user_remove(
+                name="A",
+                database="test",
+                user="root",
+                password="root",
+                host="localhost",
+                port=8000,
+            )
+
+        mock_inf_db_client = MagicMock(return_value=MockInfluxDBClient())
+        with patch.object(influx08, "_client", mock_inf_db_client):
+            with patch.object(influx08, "user_exists", return_value=True):
+                assert influx08.user_remove(
+                    name="A",
+                    user="root",
+                    password="root",
+                    host="localhost",
+                    port=8000,
+                )
+
+                assert influx08.user_remove(
                     name="A",
                     database="test",
                     user="root",
                     password="root",
                     host="localhost",
                     port=8000,
-                )
-            )
-
-        mock_inf_db_client = MagicMock(return_value=MockInfluxDBClient())
-        with patch.object(influx08, "_client", mock_inf_db_client):
-            with patch.object(influx08, "user_exists", return_value=True):
-                self.assertTrue(
-                    influx08.user_remove(
-                        name="A",
-                        user="root",
-                        password="root",
-                        host="localhost",
-                        port=8000,
-                    )
-                )
-
-                self.assertTrue(
-                    influx08.user_remove(
-                        name="A",
-                        database="test",
-                        user="root",
-                        password="root",
-                        host="localhost",
-                        port=8000,
-                    )
                 )
 
     def test_query(self):
@@ -273,15 +239,13 @@ class InfluxTestCase(TestCase):
         """
         mock_inf_db_client = MagicMock(return_value=MockInfluxDBClient())
         with patch.object(influx08, "_client", mock_inf_db_client):
-            self.assertTrue(
-                influx08.query(
-                    database="db",
-                    query="q",
-                    user="root",
-                    password="root",
-                    host="localhost",
-                    port=8000,
-                )
+            assert influx08.query(
+                database="db",
+                query="q",
+                user="root",
+                password="root",
+                host="localhost",
+                port=8000,
             )
 
     def test_retention_policy_get(self):
@@ -289,38 +253,28 @@ class InfluxTestCase(TestCase):
         policy = {"name": "foo"}
         with patch.object(influx08, "_client", MagicMock(return_value=client)):
             client.get_list_retention_policies = MagicMock(return_value=[policy])
-            self.assertEqual(
-                policy, influx08.retention_policy_get(database="db", name="foo")
-            )
+            assert policy == influx08.retention_policy_get(database="db", name="foo")
 
     def test_retention_policy_add(self):
         client = MockInfluxDBClient()
         with patch.object(influx08, "_client", MagicMock(return_value=client)):
             client.create_retention_policy = MagicMock()
-            self.assertTrue(
-                influx08.retention_policy_add(
-                    database="db",
-                    name="name",
-                    duration="30d",
-                    replication=1,
-                )
+            assert influx08.retention_policy_add(
+                database="db",
+                name="name",
+                duration="30d",
+                replication=1,
             )
-            client.create_retention_policy.assert_called_once_with(
-                "name", "30d", 1, "db", False
-            )
+            client.create_retention_policy.assert_called_once_with("name", "30d", 1, "db", False)
 
     def test_retention_policy_modify(self):
         client = MockInfluxDBClient()
         with patch.object(influx08, "_client", MagicMock(return_value=client)):
             client.alter_retention_policy = MagicMock()
-            self.assertTrue(
-                influx08.retention_policy_alter(
-                    database="db",
-                    name="name",
-                    duration="30d",
-                    replication=1,
-                )
+            assert influx08.retention_policy_alter(
+                database="db",
+                name="name",
+                duration="30d",
+                replication=1,
             )
-            client.alter_retention_policy.assert_called_once_with(
-                "name", "db", "30d", 1, False
-            )
+            client.alter_retention_policy.assert_called_once_with("name", "db", "30d", 1, False)

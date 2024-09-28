@@ -279,9 +279,7 @@ def user_exists(name, database=None, user=None, password=None, host=None, port=N
     return False
 
 
-def user_create(
-    name, passwd, database=None, user=None, password=None, host=None, port=None
-):
+def user_create(name, passwd, database=None, user=None, password=None, host=None, port=None):
     """
     Create a cluster admin or a database user.
 
@@ -333,9 +331,7 @@ def user_create(
     return client.add_database_user(name, passwd)
 
 
-def user_chpass(
-    name, passwd, database=None, user=None, password=None, host=None, port=None
-):
+def user_chpass(name, passwd, database=None, user=None, password=None, host=None, port=None):
     """
     Change password for a cluster admin or a database user.
 
@@ -439,9 +435,7 @@ def user_remove(name, database=None, user=None, password=None, host=None, port=N
     return client.delete_database_user(name)
 
 
-def retention_policy_get(
-    database, name, user=None, password=None, host=None, port=None
-):
+def retention_policy_get(database, name, user=None, password=None, host=None, port=None):
     """
     Get an existing retention policy.
 
@@ -466,9 +460,7 @@ def retention_policy_get(
     return None
 
 
-def retention_policy_exists(
-    database, name, user=None, password=None, host=None, port=None
-):
+def retention_policy_exists(database, name, user=None, password=None, host=None, port=None):
     """
     Check if a retention policy exists.
 

@@ -17,9 +17,7 @@ def __virtual__():
     return (False, "influxdb module could not be loaded")
 
 
-def present(
-    name, database, query, resample_time=None, coverage_period=None, **client_args
-):
+def present(name, database, query, resample_time=None, coverage_period=None, **client_args):
     """
     Ensure that given continuous query is present.
 
@@ -86,9 +84,7 @@ def absent(name, database, **client_args):
     if __salt__["influxdb.continuous_query_exists"](database, name, **client_args):
         if __opts__["test"]:
             ret["result"] = None
-            ret["comment"] = (
-                f"continuous query {name} is present and needs to be removed"
-            )
+            ret["comment"] = f"continuous query {name} is present and needs to be removed"
             return ret
         if __salt__["influxdb.drop_continuous_query"](database, name, **client_args):
             ret["comment"] = f"continuous query {name} has been removed"
