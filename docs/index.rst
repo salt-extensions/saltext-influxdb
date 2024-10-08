@@ -1,4 +1,4 @@
-``saltext-influxdb``: Integrate Salt with Influxdb
+``saltext-influxdb``: Integrate Salt with InfluxDB
 ==================================================
 
 Salt Extension for interacting with InfluxDB
