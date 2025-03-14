@@ -1,5 +1,5 @@
 """
-    :codeauthor: Rupesh Tare <rupesht@saltstack.com>
+:codeauthor: Rupesh Tare <rupesht@saltstack.com>
 """
 
 from unittest.mock import MagicMock
