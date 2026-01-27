@@ -231,9 +231,7 @@ def get_fun(fun):
             from returns
             where fun = '{}'
             group by fun, id
-          """.format(
-        fun
-    )
+          """.format(fun)
 
     data = serv.query(sql)
     ret = {}
